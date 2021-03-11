@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30621.155
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "simpleDBMS", "simpleDBMS\simpleDBMS.csproj", "{0D8B99C4-F299-4277-B83F-E76567A89AE1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "simpleDBMS.Compiler", "simpleDBMS\simpleDBMS.Compiler.csproj", "{0D8B99C4-F299-4277-B83F-E76567A89AE1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
