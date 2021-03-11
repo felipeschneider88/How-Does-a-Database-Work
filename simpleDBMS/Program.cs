@@ -4,7 +4,13 @@ namespace simpleDBMS
 {
     class Program
     {
-        
+        public enum MetaCommandResult
+        {
+            META_COMMAND_SUCCESS,
+            META_COMMAND_UNRECOGNIZED_COMMAND
+        }
+
+
         static void Main(string[] args)
         {
             string inputBuffer = null;
