@@ -1,32 +1,101 @@
 ﻿using System;
 
-namespace simpleDBMS
+namespace simpleDBMS.Compiler
 {
     class Program
     {
-        public enum MetaCommandResult
+     
+
+        public static void print_promt(string _content)
         {
-            META_COMMAND_SUCCESS,
-            META_COMMAND_UNRECOGNIZED_COMMAND
+            Console.WriteLine("db > " + _content);
         }
 
+        //prepare_statement (our “SQL Compiler”) does not understand SQL right now. 
+        //In fact, it only understands two words INSERT and SELECT
+        public static void prepare_statement(Statement _statement)
+        {
+            _statement.prepareResult = PrepareResult.PREPARE_SUCCESS;
+            if (_statement.queryText.StartsWith("insert") == true)
+            {
+                _statement.statementType = StatementType.STATEMENT_INSERT;
+            }
+            else if (_statement.queryText.StartsWith("select") == true)
+            {
+                _statement.statementType = StatementType.STATEMENT_SELECT;
+            }
+            else
+            {
+                _statement.prepareResult = PrepareResult.PREPARE_UNRECOGNIZED_STATEMENT;
+            }
+        }
+        public static void execute_statement(Statement _statement)
+        {
+            switch(_statement.statementType)
+            {
+                case (StatementType.STATEMENT_INSERT):
+                    print_promt("This is where we would do an insert.");
+                    break;
+                case (StatementType.STATEMENT_SELECT):
+                    print_promt("This is where we would do a select.");
+                    break;
 
+            }
+        }
+
+        //do_meta_command is just a wrapper for existing functionality that leaves room for more commands
+        private static MetaCommandResult do_meta_comand(string inputBuffer)
+        {
+            if (String.Compare(inputBuffer, ".exit") == 0)
+            {
+                return MetaCommandResult.META_COMMAND_EXIT;
+            }
+            else
+            {
+                return MetaCommandResult.META_COMMAND_UNRECOGNIZED_COMMAND;
+            }
+        }
         static void Main(string[] args)
         {
+            MetaCommandResult metaCommandResult = MetaCommandResult.META_COMMAND_RUN;
             string inputBuffer = null;
-            while (true)
+            while (metaCommandResult != MetaCommandResult.META_COMMAND_EXIT)
             {
-                Console.WriteLine("db > ");
+                print_promt("");
                 inputBuffer = Console.ReadLine();
-                if (String.Compare(inputBuffer, ".exit") == 0)
+                if (inputBuffer[0].Equals('.'))
                 {
-                    Environment.Exit(-1);
+                    switch (do_meta_comand(inputBuffer))
+                    {
+                        case MetaCommandResult.META_COMMAND_EXIT:
+                            metaCommandResult = MetaCommandResult.META_COMMAND_EXIT;
+                            break;
+                        case MetaCommandResult.META_COMMAND_SUCCESS:
+                            continue;
+                        case
+                            MetaCommandResult.META_COMMAND_UNRECOGNIZED_COMMAND:
+                            Console.WriteLine("Unrecognized command {0}", inputBuffer);
+                            continue;
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("Unrecognized command {0}", inputBuffer);
+                    Statement newStatement = new Statement(inputBuffer);
+                    prepare_statement(newStatement);
+                    switch (newStatement.prepareResult)
+                    {
+                        case PrepareResult.PREPARE_SUCCESS:
+                            break;
+                        case PrepareResult.PREPARE_UNRECOGNIZED_STATEMENT:
+                            Console.WriteLine("Unrecognized keyword at start of {0}", inputBuffer);
+                            break;
+                    }
+                    execute_statement(newStatement);
+                    Console.WriteLine("Executed.");
                 }
+
             }
+            Environment.Exit(-1);
         }
     }
 }
