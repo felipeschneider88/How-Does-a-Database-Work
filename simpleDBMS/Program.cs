@@ -74,7 +74,8 @@ namespace simpleDBMS.Compiler
                             continue;
                         case
                             MetaCommandResult.META_COMMAND_UNRECOGNIZED_COMMAND:
-                            Console.WriteLine("Unrecognized command {0}", inputBuffer);
+                            print_promt("Unrecognized keyword at start of " + inputBuffer);
+                            //Console.WriteLine("Unrecognized command {0}", inputBuffer);
                             continue;
                     }
                 }
@@ -87,11 +88,13 @@ namespace simpleDBMS.Compiler
                         case PrepareResult.PREPARE_SUCCESS:
                             break;
                         case PrepareResult.PREPARE_UNRECOGNIZED_STATEMENT:
-                            Console.WriteLine("Unrecognized keyword at start of {0}", inputBuffer);
+                            //Console.WriteLine("Unrecognized keyword at start of {0}", inputBuffer);
+                            print_promt("Unrecognized keyword at start of " + inputBuffer);
                             break;
                     }
                     execute_statement(newStatement);
-                    Console.WriteLine("Executed.");
+                    print_promt("Executed.");
+                    //Console.WriteLine("Executed.");
                 }
 
             }
